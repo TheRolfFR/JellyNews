@@ -1,10 +1,13 @@
 from typing import Optional
+import os
+
+import asyncio
 from quart import Quart
 from quart import request
-from graph_api import GraphAPI
-import os
 from dotenv import load_dotenv
-from jellyfin_auth_store import JellyfinAuthStore, JellyfinQuickConnectAuth
+
+from .graph_api import GraphAPI
+from .jellyfin_auth_store import JellyfinAuthStore, JellyfinQuickConnectAuth
 
 load_dotenv()
 
@@ -15,6 +18,10 @@ notification_type = os.environ.get("NO_PUSH")
 
 jf_qc_auth = JellyfinQuickConnectAuth(os.getenv('JELLYFIN_SERVER_URL'))
 jf_auth = JellyfinAuthStore(jf_qc_auth).load_store()
+
+@app.get("/kaboom")
+async def kaboom():
+    return "Yes Rico, kaboom"
 
 @app.post("/")
 async def receive_endpoint():
@@ -55,8 +62,8 @@ async def receive_endpoint():
 
     return ""
 
-def main():
-    app.run(host="0.0.0.0", port="8080", debug=False)
+async def main():
+    await app.run_task(host="0.0.0.0", port="8080", debug=False)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -1,7 +1,6 @@
 import requests
 from dotenv import load_dotenv
 import copy
-
 import os
 
 load_dotenv()

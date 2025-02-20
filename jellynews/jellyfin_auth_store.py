@@ -1,4 +1,4 @@
-from jellyfin import JellyfinQuickConnectAuth
+from .jellyfin import JellyfinQuickConnectAuth
 from pathlib import Path
 
 

@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jellynews"
+
+description = "Jellyfin messenger bot to receive updates from newsletters"
+readme = "README.md"
+license = { text = "MIT" }
+keywords = ["jellyfin", "newsletter", "messenger", "graphapi"]
+
+dynamic = ["version"]
+
+requires-python = ">= 3.12"
+dependencies = [
+  "asyncio",
+  "aiosmtpd",
+  "yarl",
+  "python-dotenv",
+  "quart==0.20.0",
+]
+
+authors = [
+  {name = "TheRolf"},
+]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+
+  "License :: OSI Approved :: MIT License",
+
+  "Intended Audience :: Developers",
+
+  "Topic :: Communications :: Email",
+  "Topic :: Communications :: Chat",
+  "Topic :: Multimedia",
+
+  "Programming Language :: Python :: 3.9",
+]
+
+[project.urls]
+Repository = "https://github.com/TheRolfFR/JellyNews.git"
+Issues = "https://github.com/TheRolfFR/JellyNews/issues"
+"Download Link" = "https://github.com/TheRolfFR/JellyNews/releases"
+
+[tool.setuptools.dynamic]
+version = {attr = "jellynews.__version__"}

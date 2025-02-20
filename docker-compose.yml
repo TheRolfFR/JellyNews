@@ -1,20 +1,12 @@
-version: "3"
 services:
-  smtp2signal:
-    hostname: "smtp2signal.docker"
-    build: ./smtp2signal
-    restart: always
+  jellynews:
+    hostname: "jellynews.docker"
+    build: .
+    restart: unless-stopped
     environment:
-      SIGNAL_CLI_BASE_URL: http://signal-cli-rest-api:8080/
-      SIGNAL_SMTP_TOKEN_FILE: /home/smtp2signal.token 
+      - JELLYFIN_SERVER_URL=https://public.jellyfin.com
+      - FB_GRAPH_API_TOKEN=0123456789abcdefghi
     ports:
-      - 8025:8025
-    volumes:
-      - "./data/smtp2signal:/home"
-  signal-cli-rest-api:
-    image: bbernhard/signal-cli-rest-api:0.90
-    restart: always
-    environment:
-      - MODE=json-rpc
-    volumes:
-      - "./data/signal-cli:/home/.local/share/signal-cli" 
+      - 8008:8080  # Bot port
+      - 5021:5021
+
