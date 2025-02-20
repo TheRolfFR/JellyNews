@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class JellyfinQuickConnectAuth:
+    """Good doc at https://api.jellyfin.org/#tag/User/operation/AuthenticateWithQuickConnect
+    """
 
     server_url: URL
     device_id: str
@@ -18,6 +20,10 @@ class JellyfinQuickConnectAuth:
             "Content-Type": "application/json",
             "Authorization": f"MediaBrowser Client=\"{self.client}\", Device=Android, DeviceId={self.device_id}, Version=0.0.1"
         }
+
+    @property
+    def url(self):
+        return str(self.server_url) + "/web/#/quickconnect"
 
     def __init__(self, server_url: str, device_id = "0123456", client="TheBot"):
         self.server_url = URL(server_url)

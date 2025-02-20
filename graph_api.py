@@ -66,6 +66,33 @@ class GraphAPI:
             attachment["payload"]["elements"][0]["buttons"] = buttons
         return attachment
 
+    def quick_reply(self, title, payload, image=None):
+        qr = {
+            "content_type": "text",
+            "title": title,
+            "payload": str(payload),
+        }
+        if image is not None:
+            qr["image"] = image
+        return qr
+
+    def send_quick_replies(self, recipient: str, text: str, quick_replies: list[dict], notification_type="REGULAR"):
+        payload = {
+            "recipient": {"id": recipient},
+            "notification_type": notification_type,
+            "message": {
+                "text": text,
+                "quick_replies": quick_replies
+            }
+        }
+
+        response = requests.post(
+            API, headers=self.headers, json=payload, params=self.params
+        )
+        print(response, response.status_code, response.text)
+        return response.status_code == 200
+
+
     def send_template(self, recipient, template, **kwargs):
         payload = {
             "recipient": {"id": recipient},
