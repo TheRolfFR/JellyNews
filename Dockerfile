@@ -1,25 +1,6 @@
-FROM python:3.12-alpine as base
+FROM python:3.12-alpine
 
-
-FROM base as builder
-
-RUN apk --update add git gcc musl-dev linux-headers
-
-RUN mkdir /install
-RUN mkdir /tmp/pipenv
-
-WORKDIR /tmp/pipenv
-RUN pip install pipenv
-COPY Pipfile* /tmp/pipenv/
-RUN pipenv requirements > requirements.txt
-
-WORKDIR /install
-RUN pip install --prefix=/install -r /tmp/pipenv/requirements.txt
-COPY *.py /install/bin/
-COPY *.sh /install/bin
-
-
-FROM base
+RUN pip install -e .
 
 ENV SIGNAL_SMTP_PORT=8025
 ENV SIGNAL_SMTP_HOST=0.0.0.0
