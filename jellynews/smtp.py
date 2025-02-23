@@ -1,18 +1,7 @@
 from aiosmtpd.controller import Controller
 import aiosmtpd.smtp
 import asyncio
-
-
-async def main():
-    handler = CustomSMTPHandler()
-    controller = Controller(handler, hostname="0.0.0.0", port=5021)
-    controller.start()
-    print("SMTP server started on port 5021")
-    try:
-        while True:
-            await asyncio.sleep(1)
-    except asyncio.CancelledError:
-        controller.stop()
+import os
 
 
 class CooperativeSmtpController(aiosmtpd.controller.UnthreadedController):
@@ -33,5 +22,28 @@ class CustomSMTPHandler:
         return "250 OK"
 
 
+def create_controller() -> Controller:
+    handler = CustomSMTPHandler()
+    controller_hostname = os.environ.get("SMTP_HOST", "127.0.0.1")
+    controller_port = os.environ.get("STMP_PORT", 5021)
+    controller = Controller(handler, hostname=controller_hostname, port=controller_port)
+    return controller
+
+
+async def run():
+    controller = create_controller()
+    await main(controller)
+
+async def main(controller: Controller):
+    controller.start()
+    print(f"SMTP started on {controller.hostname}:{controller.port}")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        print("SMTP task cancelled")
+        controller.stop()
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run())

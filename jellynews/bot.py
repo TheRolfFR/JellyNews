@@ -2,12 +2,14 @@ from typing import Optional
 import os
 
 import asyncio
+import quart
 from quart import Quart
 from quart import request
 from dotenv import load_dotenv
+import quart.utils
 
-from .graph_api import GraphAPI
-from .jellyfin_auth_store import JellyfinAuthStore, JellyfinQuickConnectAuth
+from jellynews.graph_api import GraphAPI
+from jellynews.jellyfin_auth_store import JellyfinAuthStore, JellyfinQuickConnectAuth
 
 load_dotenv()
 
@@ -62,8 +64,16 @@ async def receive_endpoint():
 
     return ""
 
-async def main():
-    await app.run_task(host="0.0.0.0", port="8080", debug=False)
+@app.after_serving
+async def shutdown():
+    tasks = asyncio.all_tasks()
+	# cancel all tasks
+    for task in tasks:
+	    # request the task cancel
+	    task.cancel()
+
+async def run_task():
+    await app.run_task(host="0.0.0.0", port=os.environ.get("FB_BOT_PORT", 8080), debug=True)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run_task())
