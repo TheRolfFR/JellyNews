@@ -2,11 +2,9 @@ from typing import Optional
 import os
 
 import asyncio
-import quart
 from quart import Quart
 from quart import request
 from dotenv import load_dotenv
-import quart.utils
 
 from jellynews.graph_api import GraphAPI
 from jellynews.jellyfin_auth_store import JellyfinAuthStore, JellyfinQuickConnectAuth
