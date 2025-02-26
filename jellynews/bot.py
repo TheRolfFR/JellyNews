@@ -71,6 +71,7 @@ async def shutdown():
 	    task.cancel()
 
 async def run_task():
+    print("Starting bot...")
     await app.run_task(host="0.0.0.0", port=os.environ.get("FB_BOT_PORT", 8080), debug=True)
 
 if __name__ == "__main__":
